@@ -1,1 +1,2 @@
-.env
+aiAPI.env
+database.env
