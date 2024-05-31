@@ -1,0 +1,29 @@
+body {
+    background-color: #303831;
+    h1 {
+        color: #c3dbc6;
+        text-align:  center;
+        text-indent: 20px;
+    }
+}
+
+h1_color {
+    color: while;
+}
+
+header {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    -web<it-box-shadow: 0 5px 25px rgba(0, 0, 0, 0.15);
+        box-shadow: 0 5px 25px rgba(3, 0, 0, 0.15);
+}
+
+.header_img {
+    height: 40px;
+    width: 40px;
+}
+
+.text_center {
+    text-align:  center;
+}

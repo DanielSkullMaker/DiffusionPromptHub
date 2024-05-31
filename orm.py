@@ -1,21 +1,18 @@
 from sqlalchemy import Insert, text, select, and_
-from models import Base, UserInfo, LogPass, ChatPromts
+from models import Base, UserInfo, LogPass, ChatPromts, ElectPromts
 from faker import Faker
 from database import engine, session_factory
 from sqlalchemy.orm import class_mapper
 
-#Создает все таблицы - Для начала удаляет их всех)
 def createTables():
     engine.echo = False
     Base.metadata.drop_all(engine)
     Base.metadata.create_all(engine)
 
-#Генерация случайных данных для тестирования БД
 def generatorBasedata():
     fake = Faker()
     registerPerson(nickname=fake.user_name(), login=fake.email(), password=fake.password())
 
-#Регистрация нового пользователя - Одним окном будем отправлять в разные таблицы
 def registerPerson(nickname: str,
                    login: str,
                    password: str):
@@ -29,8 +26,7 @@ def registerPerson(nickname: str,
         session.add(inLogPass)
         session.commit()
 
-#Добавление промта в БД
-def LogPromt(id: int,
+def logPromt(id: int,
              promt: str):
     with session_factory() as session:
         engine.echo = True
@@ -38,17 +34,36 @@ def LogPromt(id: int,
         session.add(inChatPromts)
         session.commit()
 
-#Проверка существования пользователя
+def logElectPromt(nickname: str,
+                  promt: str):
+    with session_factory() as session:
+        engine.echo = True
+        inChatPromts = ElectPromts(nickname=nickname, promt=promt)
+        session.add(inChatPromts)
+        session.commit()
+
 def signIn(login: str, password: str):
     with session_factory() as session:
         engine.echo = False
         query = select(LogPass.id).filter(and_(LogPass.login == login, LogPass.password == password))
         if session.execute(query).all() != []:
-            return True
+            query = select(UserInfo.nickname).filter(UserInfo.id == session.execute(query).all()[0][0])
+            return [True, session.execute(query).all()[0][0]]
         else:
-            return False
+            return [False]
 
-# Обновление данных в БД
+def getInfo(nickname: str):
+    with session_factory() as session:
+        engine.echo = False
+
+        query = select(UserInfo.id, UserInfo.rule, UserInfo.created_on).filter(UserInfo.nickname == nickname)
+        infoUser = session.execute(query).all()
+
+        query = select(LogPass.login).filter(LogPass.id == infoUser[0][0])
+        infoUser.append(session.execute(query).all()[0][0])
+
+        return infoUser
+
 def updatePerson(id: int,
                  new_nickname: str,
                  new_rule: str,
@@ -68,17 +83,5 @@ def updatePerson(id: int,
         inLogPass.login = new_login
         inLogPass.password = new_password
         session.commit()
-"""
-createTables()
-for i in range(1, 11):
-    generatorBasedata()
 
-print("login = ")
-log = input()
-print("password = ")
-passw = input()
-
-res = signIn(login=log, password=passw)
-print(f"Результат - {res}")
-
-"""
+getInfo(nickname="lol")

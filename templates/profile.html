@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{%block title%}
+Личный кабинет пользователя
+{%endblock%}
+
+{%block body%}
+<h1>Личный кабинет пользователя</h1>
+
+<ul class="list-group">
+    <li class="list-group-item">Индивидуальный номер аккаунта: {{id}}</li>
+    <li class="list-group-item">Никнейм: {{nickname}}</li>
+    <li class="list-group-item">Почта: {{login}}</li>
+    <li class="list-group-item">Роль: {{rule}}</li>
+    <li class="list-group-item">Дата регистрации: {{created_on}}</li>
+</ul>
+
+<a href="/logout">
+    <button class="btn btn-primary w-100 py-2" type="submit">Выйти</button>
+</a>
+{%endblock%}

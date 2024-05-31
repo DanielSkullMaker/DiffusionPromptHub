@@ -1,4 +1,4 @@
-from sqlalchemy import create_engine #text
+from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from config import settings
 
@@ -10,9 +10,3 @@ engine = create_engine(
 )
 
 session_factory = sessionmaker(engine)
-
-"""
-with engine.connect() as conn:
-    res = conn.execute(text("SELECT VERSION()"))
-    print(f"{res.all()}")
-"""

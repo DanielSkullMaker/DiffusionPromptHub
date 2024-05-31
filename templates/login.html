@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{%block title%}
+- Введите логин и пароль -
+{%endblock%}
+
+{%block body%}
+{{ super() }}
+<body>
+  <h1> Вход </h1>
+  <form method="POST">
+
+    <div class="form-floating">
+      <input type="email" class="form-control" name="login" id="floatingInput" placeholder="name@example.com">
+      <label for="floatingInput">Логин</label>
+    </div>
+
+    <div class="form-floating">
+      <input type="password" class="form-control" name="password" id="floatingPassword" placeholder="Password">
+      <label for="floatingPassword">Пароль</label>
+    </div>
+
+    {% for msg in get_flashed_messages() %}
+    <h1> <div class="flash"> {{msg}} </div> </h1>
+    {% endfor %}
+
+    <button class="btn btn-primary w-100 py-2" type="submit">Войти в Личный Кабинет</button>
+  </form>
+</body>
+{%endblock%}
