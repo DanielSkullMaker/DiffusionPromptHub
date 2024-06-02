@@ -37,7 +37,8 @@ class UserInfo(Base):
 class ChatPromts(Base):
     __tablename__ = 'ChatProms'
 
-    id: Mapped[int] = mapped_column(ForeignKey('UserInfo.id'))
+    id: Mapped[int] = mapped_column(primary_key=True)
+    id_person: Mapped[int] = mapped_column(nullable=False)
     datetime: Mapped[str] = mapped_column(default=datetime.now().strftime("%m/%d/%Y, %H:%M:%S"))
     promt: Mapped[str] = mapped_column(nullable=False)
 
@@ -48,6 +49,13 @@ class ChatPromts(Base):
 class ElectPromts(Base):
     __tablename__ = 'ElectPromts'
 
-    id_promt: Mapped[int] = mapped_column(primary_key=True)
-    nickname: Mapped[str] = mapped_column(nullable=False)
+    id: Mapped[int] = mapped_column(primary_key=True)
+    id_promt: Mapped[int] = mapped_column(nullable=False)
+    created_on: Mapped[str] = mapped_column(default=datetime.now().strftime("%m/%d/%Y, %H:%M:%S"))
     promt: Mapped[str] = mapped_column(nullable=False)
+
+    __table_args__ = (
+        # Установка на уникальное имя
+        UniqueConstraint('id_promt'),
+    )
+

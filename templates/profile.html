@@ -18,4 +18,26 @@
 <a href="/logout">
     <button class="btn btn-primary w-100 py-2" type="submit">Выйти</button>
 </a>
+
+<h1> Избранные промты </h1>
+
+<table class="table table-bordered">
+    <thead>
+            <tr>
+                <td>Номер поста</td>
+                <td>Дата и время</td>
+                <td>Запрос</td>
+            </tr>
+        </thead>
+    {% for el in prt %}
+        <thead>
+            <tr>
+                <td>{{el[0]}}</td>
+                <td>{{el[1]}}</td>
+                <td>{{el[2]}}</td>
+            </tr>
+        </thead>
+    {% endfor %}
+</table>
+
 {%endblock%}

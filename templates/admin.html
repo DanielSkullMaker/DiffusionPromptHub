@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+
+{%block title%}
+Личный кабинет администратора
+{%endblock%}
+
+{%block body%}
+<h1>Личный кабинет администратора</h1>
+
+<ul class="list-group">
+    <li class="list-group-item">Индивидуальный номер аккаунта: {{id}}</li>
+    <li class="list-group-item">Никнейм: {{nickname}}</li>
+    <li class="list-group-item">Почта: {{login}}</li>
+    <li class="list-group-item">Роль: {{rule}}</li>
+    <li class="list-group-item">Дата регистрации: {{created_on}}</li>
+</ul>
+
+<a href="/logout">
+    <button class="btn btn-primary w-100 py-2" type="submit">Выйти из аккаунта</button>
+</a>
+
+<h1> Список пользователей</h1>
+
+<table class="table table-bordered">
+    <thead>
+            <tr>
+                <td>Номер аккаунта</td>
+                <td>Никнейм</td>
+                <td>Роль</td>
+                <td>Дата регистрации</td>
+            </tr>
+        </thead>
+    {% for el in msg %}
+        <thead>
+            <tr>
+                <td>{{el[0]}}</td>
+                <td>{{el[1]}}</td>
+                <td>{{el[2]}}</td>
+                <td>{{el[3]}}</td>
+            </tr>
+        </thead>
+    {% endfor %}
+</table>
+
+<h1> Общая база промтов</h1>
+
+<table class="table table-bordered">
+    <thead>
+            <tr>
+                <td>Номер поста</td>
+                <td>Номер аккаунта</td>
+                <td>Дата и время</td>
+                <td>Запрос</td>
+            </tr>
+        </thead>
+    {% for el in prt %}
+        <thead>
+            <tr>
+                <td>{{el[0]}}</td>
+                <td>{{el[1]}}</td>
+                <td>{{el[2]}}</td>
+                <td>{{el[3]}}</td>
+            </tr>
+        </thead>
+    {% endfor %}
+</table>
+
+<h1> Выделить промт в избранное</h1>
+
+<form method="POST">
+
+    <div class="form-floating">
+      <input class="form-control" name="elect" id="elect">
+      <label for="elect">Номер поста</label>
+    </div>
+
+    <button class="btn btn-primary w-100 py-2" type="submit">Выделить промт</button>
+
+    {% for msg in get_flashed_messages() %}
+    <h1> <div class="flash"> {{msg}} </div> </h1>
+    {% endfor %}
+
+  </form>
+{%endblock%}

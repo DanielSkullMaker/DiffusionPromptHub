@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, flash, \
     session, redirect, url_for, abort
-from orm import signIn, registerPerson, getInfo
+from orm import signIn, registerPerson, getInfo, logPromt, getAllInfo, getAllPromt, \
+    getAllElectPromt, logElectPromt
 from ai_api import aiSettings
 
 app = Flask(__name__)
@@ -22,6 +23,10 @@ def login():
         sign = signIn(login=request.form["login"], password=request.form["password"])
         if sign[0]:
             session["userLogged"] = sign[1]
+
+            if sign[2] == "Admin":
+                return redirect(url_for('admin', username=session["userLogged"]))
+
             return redirect(url_for('profile', username=session["userLogged"]))
         else:
             flash("Не верный логин или пароль, повторите попытку авторизации")
@@ -52,7 +57,10 @@ def profile(username):
     if 'userLogged' not in session or session['userLogged'] != username:
         abort(404)
     info = getInfo(nickname=username)
+    prt = getAllElectPromt()
+
     return render_template('profile.html', id=info[0][0],
+                           prt=prt,
                            nickname=username, login=info[-1],
                            rule=info[0][1], created_on=info[0][2])
 
@@ -63,11 +71,35 @@ def chat():
         return redirect(url_for('login'))
 
     if request.method == "POST":
+        logPromt(nickname=session['userLogged'], promt=request.form["query"])
         for message in aiSettings(user=session['userLogged'], query=request.form["query"]).parser():
             flash(message)
 
     return render_template('chat.html')
 
+
+@app.route("/admin/<username>", methods = ["POST", "GET"])
+def admin(username):
+    if 'userLogged' not in session or session['userLogged'] != username:
+        abort(404)
+
+    info = getInfo(nickname=username)
+    msg = getAllInfo()
+    prt = getAllPromt()
+
+    if request.method == "POST":
+        try:
+            logElectPromt(id=int(request.form["elect"]))
+        except:
+            flash("Ошибка регистрации: Промт уже в избранном")
+
+    return render_template('admin.html',
+                           msg = msg, prt = prt,
+                           id=info[0][0],
+                           nickname=username,
+                           login=info[-1],
+                           rule=info[0][1],
+                           created_on=info[0][2])
 
 @app.errorhandler(404)
 def pageNotFount(error):
@@ -76,7 +108,6 @@ def pageNotFount(error):
 """@app.errorhandler(401)
 def accessDenied(error):
     redirect(url_for('login'))"""
-
 
 if __name__ == "__main__":
     app.run(debug=True)
