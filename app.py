@@ -14,7 +14,7 @@ def index():
     return render_template('index.html')
 
 
-@app.route("/login", methods = ["POST", "GET"])
+@app.route("/login", methods=["POST", "GET"])
 def login():
     if 'userLogged' in session:
         return redirect(url_for('profile', username=session["userLogged"]))
@@ -39,7 +39,7 @@ def logout():
     return render_template("index.html")
 
 
-@app.route("/register", methods = ["POST", "GET"])
+@app.route("/register", methods=["POST", "GET"])
 def register():
     if request.method == "POST":
         try:
@@ -65,7 +65,7 @@ def profile(username):
                            rule=info[0][1], created_on=info[0][2])
 
 
-@app.route("/chat", methods = ["POST", "GET"])
+@app.route("/chat", methods=["POST", "GET"])
 def chat():
     if 'userLogged' not in session:
         return redirect(url_for('login'))
@@ -104,6 +104,7 @@ def admin(username):
 @app.errorhandler(404)
 def pageNotFount(error):
     return render_template('page404.html')
+
 
 """@app.errorhandler(401)
 def accessDenied(error):
